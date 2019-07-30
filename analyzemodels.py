@@ -61,8 +61,17 @@ def get_top_similar(sentence_list, stopped_sentence, stopped_sentence_list, simi
 
     index = stopped_sentence_list.index(stopped_sentence)
     similarity_row = np.array(similarity_matrix[index, :])
-
+    
     indices = similarity_row.argsort()[-topN:][::-1]
+    return [sentence_list[i] for i in indices]
+
+def get_top_different(sentence_list, stopped_sentence, stopped_sentence_list, similarity_matrix, topN):
+
+    index = stopped_sentence_list.index(stopped_sentence)
+    similarity_row = np.array(similarity_matrix[index, :])
+    
+    #indices = similarity_row.argsort()[topN:][::-1]
+    indices = similarity_row.argsort()[0:topN]
     return [sentence_list[i] for i in indices]
 
 #
@@ -75,9 +84,15 @@ if __name__ == '__main__':
     model = gensim.models.Word2Vec.load("./MODELS/model.words.5")
     result = model.most_similar(positive=['god'])
     print(result)
+    result = model.most_similar(positive=['god'], negative=['jesus'])
+    print(result)
+    result = model.most_similar(positive=['jesus'], negative=['god'])
+    print(result)
 
     sentence_matrix = np.load('./MODELS/model.sentences.npy')
     result = get_top_similar(textinput.Sentences, textinput.StoppedSentences[0], textinput.StoppedSentences, sentence_matrix, 3)
+    print(result)
+    result = get_top_different(textinput.Sentences, textinput.StoppedSentences[0], textinput.StoppedSentences, sentence_matrix, 3)
     print(result)
 
 

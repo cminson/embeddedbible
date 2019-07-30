@@ -27,11 +27,8 @@ ALL_BOOKS = BOOKS_OLD_TESTAMENT + BOOKS_NEW_TESTAMENT
 def plot_similar_books(matrix, chart_name):
 
     coordinates2D = sklearn.manifold.TSNE(random_state=RS).fit_transform(matrix)
-    x = []
-    y = []
-    for coordinate2D in coordinates2D:
-        x.append(coordinate2D[0])
-        y.append(coordinate2D[1])
+    x = coordinates2D[:,0]
+    y = coordinates2D[:,1]
 
     colors = []
     sizes = []
@@ -41,13 +38,16 @@ def plot_similar_books(matrix, chart_name):
         if book in BOOKS_NEW_TESTAMENT: color = 'green'
 
         colors.append(color)
-        sizes.append(1500)
+        sizes.append(1600)
 
-    matplotlib.pyplot.scatter(x, y, s=sizes, alpha=0.6, color=colors)
+    matplotlib.pyplot.scatter(x, y, s=sizes, alpha=0.4, color=colors)
 
     for book_index, book_name in enumerate(ALL_BOOKS):
-        coordinate2D = coordinates2D[book_index]
-        matplotlib.pyplot.text(coordinate2D[0], coordinate2D[1], book_name, fontsize=6, ha='center', va='center')
+        matplotlib.pyplot.text(x[book_index], y[book_index], book_name, fontsize=6, ha='center', va='center')
+
+    cur_axes = matplotlib.pyplot.gca()
+    cur_axes.axes.get_xaxis().set_ticklabels([])
+    cur_axes.axes.get_yaxis().set_ticklabels([])
 
     matplotlib.pyplot.savefig(chart_name, dpi=120)
 
