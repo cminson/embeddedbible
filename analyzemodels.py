@@ -83,6 +83,8 @@ if __name__ == '__main__':
 
 
 """
+DIFFERENCES!
+
 matrix = np.load('model.books.npy')
 print(matrix)
 
