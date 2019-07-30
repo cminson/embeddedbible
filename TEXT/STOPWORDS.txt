@@ -30,3 +30,6 @@ let
 whereof
 saith
 wilt
+whereby
+upon
+till
