@@ -6,16 +6,16 @@ import nltk
 TEXT_PATH = './TEXT/bible.txt'
 STOP_WORDS_PATH = './TEXT/STOPWORDS.txt'
 
-Citations = []
-Words = []
-Sentences = []
-StoppedSentences = []
-Chapters = []
-Books = []
+AllCitations = []
+AllWords = []
+AllWordsWithCitations = []
+AllSentences = []
+AllStoppedSentences = []
+
+BookStoppedSentencesDict = {}
+BookStoppedSentencesList = []
 
 def load_bible():
-
-    book_dict = {}
 
     print('loading text ...')
     # get all the stop words
@@ -26,6 +26,7 @@ def load_bible():
             if not word: break;
             stop_words.add(word)
 
+
     # read in data
     with open(TEXT_PATH, 'r') as fd:
         lines = fd.readlines()
@@ -33,26 +34,30 @@ def load_bible():
     for line in lines:
 
         citation, sentence = line.lower().strip().replace("\n", " ").split('\t')
-        Citations.append(citation)
+        AllCitations.append(citation)
+        AllSentences.append(sentence)
 
-        Sentences.append(sentence)
-        sentence = [w.lower() for w in nltk.tokenize.word_tokenize(sentence) if not w in stop_words and len(w) > 2]
-        Words.append(sentence)
-        sentence = ' '.join(sentence)
-        StoppedSentences.append(sentence)
+        stopped_words = [w.lower() for w in nltk.tokenize.word_tokenize(sentence) if not w in stop_words and len(w) > 2]
+
+        stopped_sentence = ' '.join(stopped_words)
+        AllStoppedSentences.append(stopped_sentence)
 
         citation_parts = citation.split(' ')
         del citation_parts[-1]
         book_name = ' '.join(citation_parts)
+        stopped_words.insert(0, book_name)
+        AllWordsWithCitations.append(stopped_words)
+        AllWords.append(stopped_words)
 
-        if book_name in book_dict:
-            book_dict[book_name] += sentence
+        if book_name in BookStoppedSentencesDict:
+            BookStoppedSentencesDict[book_name] += stopped_sentence
+            BookStoppedSentencesDict[book_name] += ' '
         else:
-            book_dict[book_name] = sentence
+            BookStoppedSentencesDict[book_name] = stopped_sentence
+            BookStoppedSentencesDict[book_name] += ' '
 
-    for book, content in book_dict.items():
-        #print(book, content)
-        Books.append(content)
+    for book, stopped_sentences in BookStoppedSentencesDict.items():
+        BookStoppedSentencesList.append(stopped_sentences)
 
     print('text load complete')
 
