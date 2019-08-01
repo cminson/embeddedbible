@@ -6,6 +6,8 @@ import nltk
 TEXT_PATH = './TEXT/bible.txt'
 STOP_WORDS_PATH = './TEXT/STOPWORDS.txt'
 
+PRASES = [ 'holy ghost', 'holy spirit']
+
 AllCitations = []
 AllWords = []
 AllWordsWithCitations = []
@@ -45,7 +47,7 @@ def load_bible():
         citation_parts = citation.split(' ')
         del citation_parts[-1]
         book_name = ' '.join(citation_parts)
-        stopped_words.insert(0, book_name)
+        #stopped_words.insert(0, book_name)
         AllWordsWithCitations.append(stopped_words)
         AllWords.append(stopped_words)
 

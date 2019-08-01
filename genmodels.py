@@ -28,9 +28,9 @@ MODEL_SENTENCES = 'model.sentences'
 MODEL_CHAPTERS = 'model.chapters'
 MODEL_BOOKS = 'model.books'
 
-MAX_WORD2VEC_WINDOW = 5
+MAX_WORD2VEC_WINDOW = 10
 WORD2VEC_SG = 1
-WORD2VEC_SIZE = 500
+WORD2VEC_SIZE = 300
 WORD2VEC_MINWORD_COUNT = 5
 
 
@@ -107,8 +107,8 @@ if __name__ == '__main__':
     textinput.load_bible()
 
     build_word_model(textinput.AllWordsWithCitations)
-    build_sentence_model(textinput.AllStoppedSentences)
-    build_book_model(textinput.BookStoppedSentencesList)
+    #build_sentence_model(textinput.AllStoppedSentences)
+    #build_book_model(textinput.BookStoppedSentencesList)
 
 
     print('done')
