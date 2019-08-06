@@ -2,6 +2,9 @@ import os
 import numpy as np
 import matplotlib.pyplot 
 import sklearn.manifold
+import spacy
+from sklearn.metrics.pairwise import cosine_similarity
+import gensim
 
 RS = 25111993
 CHART_PATH = './CHARTS/'
@@ -29,6 +32,7 @@ def plot_similar_books(matrix, chart_name):
     coordinates2D = sklearn.manifold.TSNE(random_state=RS).fit_transform(matrix)
     x = coordinates2D[:,0]
     y = coordinates2D[:,1]
+    #print('coord books', coordinates2D.shape, 'matrix', matrix.shape)
 
     colors = []
     sizes = []
@@ -52,7 +56,74 @@ def plot_similar_books(matrix, chart_name):
     matplotlib.pyplot.savefig(chart_name, dpi=120)
 
 
+
+def plot_word_vectors(word_list, matrix, chart_name):
+
+    coordinates2D = sklearn.manifold.TSNE(random_state=RS).fit_transform(matrix)
+    x = coordinates2D[:,0]
+    y = coordinates2D[:,1]
+    #print('x', x)
+    #print('y', y)
+    print('coord words', coordinates2D.shape, 'matrix', matrix.shape)
+
+    colors = []
+    sizes = []
+
+    for i in range(len(x)):
+        colors.append('green')
+        sizes.append(2500)
+
+    matplotlib.pyplot.scatter(x, y, s=sizes, alpha=0.4, color=colors)
+
+    for word_index, word_name in enumerate(word_list):
+        matplotlib.pyplot.text(x[word_index], y[word_index], word_name, fontsize=6, ha='center', va='center')
+
+    cur_axes = matplotlib.pyplot.gca()
+    cur_axes.axes.get_xaxis().set_ticklabels([])
+    cur_axes.axes.get_yaxis().set_ticklabels([])
+
+    matplotlib.pyplot.savefig(chart_name, dpi=120)
+
+
+MAX_WORD2VEC_WINDOW = 2
+WORD2VEC_SG = 1
+WORD2VEC_SG = 0
+WORD2VEC_SIZE = 10
+WORD2VEC_MINWORD_COUNT = 0
+
+
 if __name__ == '__main__':
 
-    matrix  = np.load(MODEL_PATH + 'model.books.npy')
-    plot_similar_books(matrix, CHART_PATH + 'book_similarity.png')
+    test_list = ['redeemer', 'saviour',  'evermore',  'glorified',  'magnified',  'glorify',  'magnify', 'sakes', 'feareth',  'trusted']
+    test_list = ['jesus', 'god',  'matthew',  'mary',  'noah',  'dog',  'city', 
+    'serpent', 'feareth',  'valor', 'fight',  'valiant',  'weapons',  'battle',  'strengthened',  'armies', 'ramothgilead',  'mighty', 'footmen', 'trusted']
+
+    model = gensim.models.Word2Vec([test_list],
+        min_count = WORD2VEC_MINWORD_COUNT,
+        size = WORD2VEC_SIZE,
+        window = MAX_WORD2VEC_WINDOW,
+        sg = WORD2VEC_SG)
+    print(model['jesus'])
+
+    #matrix  = np.load(MODEL_PATH + 'model.books.npy')
+    #print('book shape', matrix.shape)
+    #plot_similar_books(matrix, CHART_PATH + 'book_similarity.png')
+
+    vector_list = []
+    #model = gensim.models.Word2Vec.load("./MODELS/model.words.10")
+    for word in test_list:
+        word_vector = model[word]
+        #print('word_vector', word_vector.shape)
+        vector_list.append(word_vector)
+
+    x = np.array(vector_list)
+    print('x', x.shape)
+    similarity_matrix = cosine_similarity(x)
+    #print(similarity_matrix)
+    #similarity_matrix = cosine_similarity(vector_list)
+
+    #similarity_matrix  = np.load(MODEL_PATH + 'model.books.npy')
+    print(similarity_matrix.shape)
+    plot_word_vectors(test_list, similarity_matrix, 'test.png')
+
+

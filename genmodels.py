@@ -89,7 +89,7 @@ def build_book_model(book_content):
 
         session.run([tf.compat.v1.global_variables_initializer(),  tf.compat.v1.tables_initializer()])
         embeddings = session.run(embed(book_content))
-    print('embedding complete')
+    print('embedding complete', embeddings.shape)
 
     print('computing similarity matrix')
     similarity_matrix = cosine_similarity(np.array(embeddings))
@@ -107,8 +107,7 @@ if __name__ == '__main__':
     textinput.load_bible()
 
     build_word_model(textinput.AllWordsWithCitations)
-    #build_sentence_model(textinput.AllStoppedSentences)
-    #build_book_model(textinput.BookStoppedSentencesList)
-
+    build_sentence_model(textinput.AllStoppedSentences)
+    build_book_model(textinput.BookStoppedSentencesList)
 
     print('done')
