@@ -43,12 +43,20 @@ if __name__ == '__main__':
     textinput.load_bible()
 
     model = gensim.models.Word2Vec.load("./MODELS/model.words.10")
-    result = model.most_similar(positive=['god'])
-    print('god', result)
-    result = model.most_similar(positive=['judas'])
-    print('judas', result)
     result = model.most_similar(positive=['jesus'])
-    print('jesus',result)
+    print('jesus', result)
+
+    max_sim = result[0][1]
+    min_sim = result[-1][1]
+    diff_sim = max_sim - min_sim
+    ratio = 1.0 / diff_sim
+    max_distance = ratio * max_sim
+    min_distance = ratio * min_sim
+    print(max_distance, min_distance)
+
+    """
+    result = model.most_similar(positive=['judas'])
+    print('judas',result)
     result = model.most_similar(positive=['god'], negative=['jesus'])
     print('god - jesus', result)
     result = model.most_similar(positive=['jesus'], negative=['god'])
@@ -62,11 +70,8 @@ if __name__ == '__main__':
     result = model.most_similar(positive=['matthew'], negative=['jesus'])
     print('matthew-jesus', result)
 
-    """
     result = model.most_similar(positive=['children'])
     print(result)
-    """
-    """
     result = model.most_similar(positive=['god'], negative=['jesus'])
     print(result)
     result = model.most_similar(positive=['jesus'], negative=['god'])

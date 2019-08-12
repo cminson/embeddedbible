@@ -53,6 +53,7 @@ def plot_similar_books(matrix, chart_name):
     cur_axes.axes.get_xaxis().set_ticklabels([])
     cur_axes.axes.get_yaxis().set_ticklabels([])
 
+    print(chart_name)
     matplotlib.pyplot.savefig(chart_name, dpi=120)
 
 
@@ -98,19 +99,13 @@ if __name__ == '__main__':
     test_list = ['jesus', 'god',  'matthew',  'mary',  'noah',  'dog',  'city', 
     'serpent', 'feareth',  'valor', 'fight',  'valiant',  'weapons',  'battle',  'strengthened',  'armies', 'ramothgilead',  'mighty', 'footmen', 'trusted']
 
-    model = gensim.models.Word2Vec([test_list],
-        min_count = WORD2VEC_MINWORD_COUNT,
-        size = WORD2VEC_SIZE,
-        window = MAX_WORD2VEC_WINDOW,
-        sg = WORD2VEC_SG)
-    print(model['jesus'])
+    matrix  = np.load(MODEL_PATH + 'model.books.npy')
+    print('sim matrix', matrix)
+    plot_similar_books(matrix, CHART_PATH + 'test1.png')
 
-    #matrix  = np.load(MODEL_PATH + 'model.books.npy')
-    #print('book shape', matrix.shape)
-    #plot_similar_books(matrix, CHART_PATH + 'book_similarity.png')
-
+    """
     vector_list = []
-    #model = gensim.models.Word2Vec.load("./MODELS/model.words.10")
+    model = gensim.models.Word2Vec.load("./MODELS/model.words.10")
     for word in test_list:
         word_vector = model[word]
         #print('word_vector', word_vector.shape)
@@ -125,5 +120,6 @@ if __name__ == '__main__':
     #similarity_matrix  = np.load(MODEL_PATH + 'model.books.npy')
     print(similarity_matrix.shape)
     plot_word_vectors(test_list, similarity_matrix, 'test.png')
+    """
 
 

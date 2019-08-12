@@ -8,13 +8,13 @@ CONFIG_PATH = './CONFIGS/'
 TEXT_PATH = './TEXT/bible.txt'
 STOP_WORDS_PATH = './TEXT/STOPWORDS.txt'
 
-PRASES = [ 'holy ghost', 'holy spirit']
 
-AllCitations = {}
+AllBooks = {}
 AllWords = []
 AllWordsWithCitations = []
 AllSentences = []
 AllStoppedSentences = []
+AllCitations = []
 
 BookStoppedSentencesDict = {}
 BookStoppedSentencesList = []
@@ -59,10 +59,10 @@ def load_bible():
     for line in lines:
 
         #citation, sentence = line.lower().strip().replace("\n", " ").split('\t')
-        citation, raw_sentence = line.replace('\n', ' ').split('\t')
+        citation, raw_sentence = line.replace('\n', '').split('\t')
         lowered_sentence = raw_sentence.lower().strip()
         citation_parts = citation.split(' ')
-        verse = citation_parts[-1]
+        citation = citation_parts[-1]
         del citation_parts[-1]
         book = ' '.join(citation_parts).replace(' ','').lower()
 
@@ -72,11 +72,12 @@ def load_bible():
 
         stopped_sentence = ' '.join(stopped_words)
         AllStoppedSentences.append(stopped_sentence)
+        AllCitations.append(book + ' ' + citation)
 
-        if book in AllCitations:
-            AllCitations[book].append((verse, raw_sentence, stopped_sentence))
+        if book in AllBooks:
+            AllBooks[book].append((citation, raw_sentence, stopped_sentence))
         else:
-            AllCitations[book] = [(verse, raw_sentence, stopped_sentence)]
+            AllBooks[book] = [(citation, raw_sentence, stopped_sentence)]
 
 
         citation_parts = citation.split(' ')
@@ -103,39 +104,6 @@ if __name__ == '__main__':
     
     load_bible()
 
-    """
-    for book in ALL_BOOKS:
-
-        book = book.replace(' ','').lower()
-        file_path = CONFIG_PATH + book + '.json'
-        with open(file_path, 'w') as fd:
-            book = book.replace(' ', '')
-            fd.write("{\n")
-            fd.write("\"" + book + "\": [\n")
-
-            verses = AllCitations[book]
-
-            count_verses = 0
-            for index, verse in enumerate(verses):
-
-                citation = verse[0]
-                sentence = verse[1]
-                print(sentence)
-                fd.write("{\n")
-                fd.write("\t\"citation\": \"" + citation + "\",\n")
-                fd.write("\t\"text\": \"" + sentence + "\"\n")
-
-                if index  != (len(verses) - 1):
-                    fd.write("},\n")
-                else:
-                    fd.write("}\n")
-            fd.write("]\n")
-            fd.write("}\n")
-        
-    with open(CONFIG_PATH + 'genesis.json','r') as fd:
-        json_data  = json.load(fd)
-    """
-
     file_path = CONFIG_PATH + 'bible.json'
     with open(file_path, 'w') as fd:
         fd.write("{\n")
@@ -143,7 +111,7 @@ if __name__ == '__main__':
         for book_index, book in enumerate(ALL_BOOKS):
 
             book = book.replace(' ','').lower()
-            verses = AllCitations[book]
+            verses = AllBooks[book]
             fd.write("\"{}\": [\n".format(book))
 
 
@@ -172,19 +140,5 @@ if __name__ == '__main__':
 
         fd.write("}\n")
         
-    with open(file_path,'r') as fd:
-        json_data  = json.load(fd)
-        for book in json_data:
-            print(json_data[book])
-        #test = json_data['numbers']
-        #print(test)
 
-    """
-    with open('data.json','r') as fd:
-        json_data  = json.load(fd)
-        test = json_data["Genesis"]
-        print(test)
-        print(test[1]['text'])
-        #print(test['text'])
-    """
 
