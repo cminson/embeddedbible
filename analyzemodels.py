@@ -46,14 +46,6 @@ if __name__ == '__main__':
     result = model.most_similar(positive=['jesus'])
     print('jesus', result)
 
-    max_sim = result[0][1]
-    min_sim = result[-1][1]
-    diff_sim = max_sim - min_sim
-    ratio = 1.0 / diff_sim
-    max_distance = ratio * max_sim
-    min_distance = ratio * min_sim
-    print(max_distance, min_distance)
-
     """
     result = model.most_similar(positive=['judas'])
     print('judas',result)

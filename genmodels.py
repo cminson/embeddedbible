@@ -82,7 +82,8 @@ def load_bible():
         citation_parts = citation.split(' ')
         citation = citation_parts[-1]
         del citation_parts[-1]
-        book = ' '.join(citation_parts).replace(' ','').lower()
+        #book = ' '.join(citation_parts).replace(' ','').lower()
+        book = ' '.join(citation_parts)
 
         AllSentences.append(lowered_sentence)
 
@@ -189,7 +190,6 @@ def save_bible_json(sentence_matrix):
 
         for book_index, book in enumerate(ALL_BOOKS):
 
-            book = book.replace(' ','').lower()
             verses = AllBooks[book]
             fd.write("\"{}\": [\n".format(book))
 
@@ -201,18 +201,16 @@ def save_bible_json(sentence_matrix):
                 sentence = verse[1]
                 stopped_sentence = verse[2]
 
-                most_similar = get_top_similar(AllCitations, stopped_sentence, AllStoppedSentences, sentence_matrix, 11)
-                most_different = get_top_different(AllCitations, stopped_sentence, AllStoppedSentences, sentence_matrix, 11)
-
-                most_similar = ','.join(most_similar)
-                most_different = ','.join(most_different)
+                list_most_similar = get_top_similar(AllCitations, stopped_sentence, AllStoppedSentences, sentence_matrix, 11)
+                del list_most_similar[0]  
+                list_most_different = get_top_different(AllCitations, stopped_sentence, AllStoppedSentences, sentence_matrix, 11)
 
                 fd.write("{\n")
                 fd.write("\t\"citation\": \"" + citation + "\",\n")
                 fd.write("\t\"text\": \"" + sentence + "\",\n")
                 fd.write("\t\"stopped_text\": \"" + stopped_sentence + "\",\n")
-                fd.write("\t\"similar\": \"" + most_similar + "\",\n")
-                fd.write("\t\"different\": \"" + most_different + "\"\n")
+                fd.write("\t\"similar\": \"" + ','.join(list_most_similar) + "\",\n")
+                fd.write("\t\"different\": \"" + ','.join(list_most_different) + "\"\n")
 
                 if verse_index  != (len(verses) - 1):
                     fd.write("},\n")
@@ -233,9 +231,9 @@ if __name__ == '__main__':
 
     load_bible()
 
-    build_word_model(AllWordsWithCitations)
+    #build_word_model(AllWordsWithCitations)
     build_sentence_model(AllStoppedSentences)
-    build_book_model(BookStoppedSentencesList)
+    #build_book_model(BookStoppedSentencesList)
 
     sentence_matrix = np.load(MODEL_PATH + 'model.sentences.npy')
     save_bible_json(sentence_matrix)
