@@ -200,17 +200,31 @@ def save_bible_json(sentence_matrix):
                 citation = verse[0]
                 sentence = verse[1]
                 stopped_sentence = verse[2]
-
-                list_most_similar = get_top_similar(AllCitations, stopped_sentence, AllStoppedSentences, sentence_matrix, 11)
-                del list_most_similar[0]  
-                list_most_different = get_top_different(AllCitations, stopped_sentence, AllStoppedSentences, sentence_matrix, 11)
-
                 fd.write("{\n")
-                fd.write("\t\"citation\": \"" + citation + "\",\n")
-                fd.write("\t\"text\": \"" + sentence + "\",\n")
-                fd.write("\t\"stopped_text\": \"" + stopped_sentence + "\",\n")
-                fd.write("\t\"similar\": \"" + ','.join(list_most_similar) + "\",\n")
-                fd.write("\t\"different\": \"" + ','.join(list_most_different) + "\"\n")
+                fd.write("\t\"c\": \"" + citation + "\",\n")
+                fd.write("\t\"t\": \"" + sentence + "\",\n")
+                fd.write("\t\"st\": \"" + stopped_sentence + "\",\n")
+
+                list_similar = get_top_similar(AllCitations, stopped_sentence, AllStoppedSentences, sentence_matrix, 11)
+                list_similar.pop(0)
+                similar_verses = []
+                for similar in list_similar:
+                    terms = similar.split(' ')
+                    citation =  terms.pop(-1)
+                    book = ' '.join(terms)
+                    similar_book_index = ALL_BOOKS.index(book)
+                    similar_verses.append(str(similar_book_index) + " " + citation)
+                fd.write("\t\"s\": \"" + ','.join(similar_verses) + "\",\n")
+
+                list_different = get_top_different(AllCitations, stopped_sentence, AllStoppedSentences, sentence_matrix, 10)
+                different_verses = []
+                for different in list_different:
+                    terms = different.split(' ')
+                    citation =  terms.pop(-1)
+                    book = ' '.join(terms)
+                    different_book_index = ALL_BOOKS.index(book)
+                    different_verses.append(str(different_book_index) + " " + citation)
+                fd.write("\t\"d\": \"" + ','.join(different_verses) + "\"\n")
 
                 if verse_index  != (len(verses) - 1):
                     fd.write("},\n")
@@ -232,7 +246,7 @@ if __name__ == '__main__':
     load_bible()
 
     #build_word_model(AllWordsWithCitations)
-    build_sentence_model(AllStoppedSentences)
+    #build_sentence_model(AllStoppedSentences)
     #build_book_model(BookStoppedSentencesList)
 
     sentence_matrix = np.load(MODEL_PATH + 'model.sentences.npy')
@@ -241,6 +255,5 @@ if __name__ == '__main__':
     with open(BIBLE_JSON,'r') as fd:
         json_data  = json.load(fd)
         print('json validated')
-
 
     print('done')
