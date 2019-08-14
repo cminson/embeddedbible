@@ -3,6 +3,7 @@ import os
 import time
 import json
 import re
+import string
 
 import nltk
 from nltk.corpus import stopwords
@@ -12,7 +13,6 @@ import tensorflow as tf
 import numpy as np
 import spacy
 from sklearn.metrics.pairwise import cosine_similarity
-
 import gensim
 
 
@@ -51,8 +51,7 @@ WORD2VEC_SIZE = 300
 WORD2VEC_MINWORD_COUNT = 5
 
 AllBooks = {}
-AllWords = []
-AllWordsWithCitations = []
+AllStoppedWords = []
 AllSentences = []
 AllStoppedSentences = []
 AllCitations = []
@@ -79,6 +78,10 @@ def load_bible():
 
         citation, raw_sentence = line.replace('\n', '').split('\t')
         lowered_sentence = raw_sentence.lower().strip()
+
+        table = lowered_sentence.maketrans(dict.fromkeys(string.punctuation))
+        lowered_sentence = lowered_sentence.translate(table)
+        #lowered_sentence = re.sub(r'[^\w\s]','',lowered_sentence)
         citation_parts = citation.split(' ')
         citation = citation_parts[-1]
         del citation_parts[-1]
@@ -102,8 +105,7 @@ def load_bible():
         citation_parts = citation.split(' ')
         del citation_parts[-1]
         book_name = ' '.join(citation_parts)
-        AllWordsWithCitations.append(stopped_words)
-        AllWords.append(stopped_words)
+        AllStoppedWords.append(stopped_words)
 
         if book_name in BookStoppedSentencesDict:
             BookStoppedSentencesDict[book_name] += stopped_sentence
@@ -245,7 +247,7 @@ if __name__ == '__main__':
 
     load_bible()
 
-    #build_word_model(AllWordsWithCitations)
+    build_word_model(AllStoppedWords)
     #build_sentence_model(AllStoppedSentences)
     #build_book_model(BookStoppedSentencesList)
 

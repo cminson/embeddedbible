@@ -119,3 +119,8 @@ bought
 fields
 nether
 otherwise
+thrice
+twice
+once
+specially
+hitherto
