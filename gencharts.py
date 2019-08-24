@@ -86,40 +86,12 @@ def plot_word_vectors(word_list, matrix, chart_name):
     matplotlib.pyplot.savefig(chart_name, dpi=120)
 
 
-MAX_WORD2VEC_WINDOW = 2
-WORD2VEC_SG = 1
-WORD2VEC_SG = 0
-WORD2VEC_SIZE = 10
-WORD2VEC_MINWORD_COUNT = 0
-
-
 if __name__ == '__main__':
 
-    test_list = ['redeemer', 'saviour',  'evermore',  'glorified',  'magnified',  'glorify',  'magnify', 'sakes', 'feareth',  'trusted']
-    test_list = ['jesus', 'god',  'matthew',  'mary',  'noah',  'dog',  'city', 
-    'serpent', 'feareth',  'valor', 'fight',  'valiant',  'weapons',  'battle',  'strengthened',  'armies', 'ramothgilead',  'mighty', 'footmen', 'trusted']
+    MODEL_BOOKS = 'model.books.npy'
 
-    matrix  = np.load(MODEL_PATH + 'model.books.npy')
-    print('sim matrix', matrix)
+    matrix  = np.load(MODEL_PATH + MODEL_BOOKS)
     plot_similar_books(matrix, CHART_PATH + 'test1.png')
 
-    """
-    vector_list = []
-    model = gensim.models.Word2Vec.load("./MODELS/model.words.10")
-    for word in test_list:
-        word_vector = model[word]
-        #print('word_vector', word_vector.shape)
-        vector_list.append(word_vector)
-
-    x = np.array(vector_list)
-    print('x', x.shape)
-    similarity_matrix = cosine_similarity(x)
-    #print(similarity_matrix)
-    #similarity_matrix = cosine_similarity(vector_list)
-
-    #similarity_matrix  = np.load(MODEL_PATH + 'model.books.npy')
-    print(similarity_matrix.shape)
-    plot_word_vectors(test_list, similarity_matrix, 'test.png')
-    """
 
 
