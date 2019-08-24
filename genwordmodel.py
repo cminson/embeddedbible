@@ -9,7 +9,7 @@ MODEL_WORDS = 'model.words'
 MAX_WORD2VEC_WINDOW = 10
 WORD2VEC_SG = 1
 WORD2VEC_SIZE = 300
-WORD2VEC_MINWORD_COUNT = 5
+WORD2VEC_MINWORD_COUNT = 1
 
 def build_word_model(word_list):
 

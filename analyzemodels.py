@@ -24,7 +24,9 @@ def get_top_similar(sentence_list, stopped_sentence, stopped_sentence_list, simi
     similarity_row = np.array(similarity_matrix[index, :])
     
     indices = similarity_row.argsort()[-topN:][::-1]
-    return [sentence_list[i] for i in indices]
+    matches =  [sentence_list[i] for i in indices]
+    scores = [similarity_row[i] for i in indices]
+    return list(zip(matches, scores))
 
 def get_top_different(sentence_list, stopped_sentence, stopped_sentence_list, similarity_matrix, topN):
 
@@ -40,11 +42,32 @@ def get_top_different(sentence_list, stopped_sentence, stopped_sentence_list, si
 #
 if __name__ == '__main__':
 
+
     textinput.load_bible()
 
     model = gensim.models.Word2Vec.load("./MODELS/model.words.10")
-    result = model.most_similar(positive=['jesus'])
+    result = model.most_similar(positive=['jesus'], topn=20)
     print('jesus', result)
+    print('\n')
+    result = model.most_similar(positive=['jesus'], negative=['god'], topn=20)
+    print('jesus', result)
+    print('\n')
+    result = model.most_similar(positive=['eve'], negative=[], topn=20)
+    print('eve', result)
+    print('\n')
+
+    """
+    result = model.most_similar(positive=['jesus'], topn=20)
+    print('jesus', result)
+    result = model.most_similar(positive=['jesus'], negative=['god'], topn=20)
+    print('jesus - god', result)
+    result = model.most_similar(positive=['god'], negative=['jesus'])
+    print('god - jesus', result)
+    result = model.most_similar(positive=['mary'], negative=[])
+    print('mary', result)
+    result = model.most_similar(positive=['mary', 'man'], negative=['woman'])
+    print('mary - woman + man', result)
+    """
 
     """
     result = model.most_similar(positive=['judas'])
@@ -74,7 +97,13 @@ if __name__ == '__main__':
     sentence_matrix = np.load('./MODELS/model.sentences.npy')
     result = get_top_similar(textinput.Sentences, textinput.StoppedSentences[0], textinput.StoppedSentences, sentence_matrix, 3)
     print(result)
-    result = get_top_different(textinput.Sentences, textinput.StoppedSentences[0], textinput.StoppedSentences, sentence_matrix, 3)
+    test = "returned sun race swift battle strong neither bread wise riches men understanding favour men skill time chance happeneth"
+    print(textinput.AllStoppedSentences[0])
+    result = get_top_similar(textinput.AllSentences, 
+            test, 
+            textinput.AllStoppedSentences, 
+            sentence_matrix, 
+            10)
     print(result)
 
     """
