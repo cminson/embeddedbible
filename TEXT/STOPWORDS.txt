@@ -163,3 +163,7 @@ doeth
 whoso
 thing
 receiveth
+asked
+ask
+answered
+deny
