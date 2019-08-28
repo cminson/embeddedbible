@@ -3,7 +3,7 @@
 This project is discussed <a href="https://www.christopherminson.com">here</a>
 <p>
 
-File Descriptions`
+File Descriptions
 <p>
 genwordmodel - generates the Word2Vec model.
 <br>
