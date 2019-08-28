@@ -1,3 +1,8 @@
+#
+# Author: Christopher Minson 
+# www.christopherminson.com
+# 
+#
 import sys
 import os
 import string

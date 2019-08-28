@@ -1,10 +1,14 @@
+#
+# Author: Christopher Minson 
+# www.christopherminson.com
+# 
+#
+import tensorflow as tf
+import numpy as np
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import tensorflow_hub as hub
-import tensorflow as tf
-import numpy as np
-import spacy
 from sklearn.metrics.pairwise import cosine_similarity
 
 import gensim
@@ -12,7 +16,6 @@ import numpy as np
 import textinput
 
 MODEL_PATH = './MODELS/'
-
 
 def cos_sim(input_vectors):
     similarity = cosine_similarity(input_vectors)
@@ -46,15 +49,21 @@ if __name__ == '__main__':
     textinput.load_bible()
 
     model = gensim.models.Word2Vec.load("./MODELS/model.words.10")
-    result = model.most_similar(positive=['jesus'], topn=20)
-    print('jesus', result)
+    result = model.wv.most_similar(positive=['mary'], topn=1500)
+    print('mary', result)
     print('\n')
-    result = model.most_similar(positive=['jesus'], negative=['god'], topn=20)
+
+    """
+    result = model.most_similar(positive=['jesus'], topn=20)
     print('jesus', result)
     print('\n')
     result = model.most_similar(positive=['eve'], negative=[], topn=20)
     print('eve', result)
     print('\n')
+    result = model.most_similar(positive=['jesus'], negative=['god'], topn=200)
+    print('jesus', result)
+    print('\n')
+    """
 
     """
     result = model.most_similar(positive=['jesus'], topn=20)

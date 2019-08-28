@@ -1,3 +1,8 @@
+#
+# Author: Christopher Minson 
+# www.christopherminson.com
+# 
+#
 import os
 import numpy as np
 import matplotlib.pyplot 
@@ -56,8 +61,6 @@ def plot_similar_books(matrix, chart_name):
     print(chart_name)
     matplotlib.pyplot.savefig(chart_name, dpi=120)
 
-
-
 def plot_word_vectors(word_list, matrix, chart_name):
 
     coordinates2D = sklearn.manifold.TSNE(random_state=RS).fit_transform(matrix)
@@ -91,7 +94,7 @@ if __name__ == '__main__':
     MODEL_BOOKS = 'model.books.npy'
 
     matrix  = np.load(MODEL_PATH + MODEL_BOOKS)
-    plot_similar_books(matrix, CHART_PATH + 'test1.png')
+    plot_similar_books(matrix, CHART_PATH + 'biblebooks.png')
 
 
 
