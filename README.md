@@ -5,9 +5,9 @@ This project is discussed <a href="https://www.christopherminson.com">here</a>
 
 File Descriptions`
 <p>
-genwordmodel - creates the Word2Vec model.
+genwordmodel - generates the Word2Vec model.
 <br>
-genphrasemodels`- creates the Sentence2Vec model.
+genphrasemodels - generates the Sentence2Vec models, for all books and sentences
 <br>
 gencharts - generates the books similarity chart
 <br>
