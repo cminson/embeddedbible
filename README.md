@@ -1,6 +1,6 @@
 # embeddedbible
 
-This project is discussed <a href="https://www.christopherminson.com">here</a>
+This project is discussed <a href="https://www.christopherminson.com/articles/aibible.html">here</a>
 <p>
 
 File Descriptions
