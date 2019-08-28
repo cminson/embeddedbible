@@ -36,7 +36,6 @@ def get_top_different(sentence_list, stopped_sentence, stopped_sentence_list, si
     index = stopped_sentence_list.index(stopped_sentence)
     similarity_row = np.array(similarity_matrix[index, :])
     
-    #indices = similarity_row.argsort()[topN:][::-1]
     indices = similarity_row.argsort()[0:topN]
     return [sentence_list[i] for i in indices]
 
@@ -49,99 +48,23 @@ if __name__ == '__main__':
     textinput.load_bible()
 
     model = gensim.models.Word2Vec.load("./MODELS/model.words.10")
-    result = model.wv.most_similar(positive=['mary'], topn=1500)
-    print('mary', result)
-    print('\n')
 
-    """
-    result = model.most_similar(positive=['jesus'], topn=20)
-    print('jesus', result)
-    print('\n')
-    result = model.most_similar(positive=['eve'], negative=[], topn=20)
-    print('eve', result)
-    print('\n')
-    result = model.most_similar(positive=['jesus'], negative=['god'], topn=200)
-    print('jesus', result)
-    print('\n')
-    """
-
-    """
-    result = model.most_similar(positive=['jesus'], topn=20)
-    print('jesus', result)
+    result = model.wv.most_similar(positive=['god'], topn=10)
+    print('god\n', result)
+    result = model.wv.most_similar(positive=['jesus'], topn=10)
+    print('jesus\n', result)
+    result = model.most_similar(positive=['god'], negative=['jesus'], topn=20)
+    print('god - jesus\n', result)
     result = model.most_similar(positive=['jesus'], negative=['god'], topn=20)
-    print('jesus - god', result)
-    result = model.most_similar(positive=['god'], negative=['jesus'])
-    print('god - jesus', result)
-    result = model.most_similar(positive=['mary'], negative=[])
-    print('mary', result)
-    result = model.most_similar(positive=['mary', 'man'], negative=['woman'])
-    print('mary - woman + man', result)
-    """
+    print('jesus - god\n', result)
+    result = model.wv.most_similar(positive=['mary'], topn=10)
+    print('mary\n', result)
+    result = model.wv.most_similar(positive=['noah', 'jesus'], topn=10)
+    print('noah + jesus\n', result)
+    result = model.wv.most_similar(positive=['forest', 'war'], topn=10)
+    print('forest + war\n', result)
 
-    """
-    result = model.most_similar(positive=['judas'])
-    print('judas',result)
-    result = model.most_similar(positive=['god'], negative=['jesus'])
-    print('god - jesus', result)
-    result = model.most_similar(positive=['jesus'], negative=['god'])
-    print('jesus - god', result)
-    result = model.most_similar(positive=['holy', 'ghost'])
-    print('holy ghost', result)
-    result = model.most_similar(positive=['mary'])
-    print('mary', result)
-    result = model.most_similar(positive=['matthew'])
-    print('matthew', result)
-    result = model.most_similar(positive=['matthew'], negative=['jesus'])
-    print('matthew-jesus', result)
-
-    result = model.most_similar(positive=['children'])
-    print(result)
-    result = model.most_similar(positive=['god'], negative=['jesus'])
-    print(result)
-    result = model.most_similar(positive=['jesus'], negative=['god'])
-    print(result)
-    """
-
-    """
     sentence_matrix = np.load('./MODELS/model.sentences.npy')
-    result = get_top_similar(textinput.Sentences, textinput.StoppedSentences[0], textinput.StoppedSentences, sentence_matrix, 3)
-    print(result)
-    test = "returned sun race swift battle strong neither bread wise riches men understanding favour men skill time chance happeneth"
-    print(textinput.AllStoppedSentences[0])
-    result = get_top_similar(textinput.AllSentences, 
-            test, 
-            textinput.AllStoppedSentences, 
-            sentence_matrix, 
-            10)
+    result = get_top_similar(textinput.AllSentences, textinput.AllStoppedSentences[0], textinput.AllStoppedSentences, sentence_matrix, 3)
     print(result)
 
-    """
-
-
-"""
-DIFFERENCES!
-
-matrix = np.load('model.books.npy')
-print(matrix)
-
-
-top_similar = get_top_similar(sentence, sentences_list, similarity_matrix, 3)
-
-# printing the list using loop
-for x in range(len(top_similar)):
-    print(top_similar[x])
-
-
-#result = model.most_similar(positive=['jesus'], negative=['matthew'])
-#print(result)
-#print (list(model.wv.vocab))
-"""
-
-"""
-print("similarity between god and jesus", model.similarity('god', 'mary'))
-print(model.similar_by_vector(model['marriage'], topn=50))
-print(model.similar_by_vector(model['god'], topn=50))
-print(model.similar_by_vector(model['jesus'], topn=50))
-print(model.similar_by_vector(model['magdalene'], topn=50))
-print(model.similar_by_vector(model['god'] - model['jesus']))
-"""
