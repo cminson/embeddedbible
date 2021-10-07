@@ -13,6 +13,9 @@ import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
 from sklearn.metrics.pairwise import cosine_similarity
+import nltk
+#nltk.download('stopwords')
+#nltk.download('punkt')
 
 URL_SENTENCE_ENCODER = "https://tfhub.dev/google/universal-sentence-encoder/2"
 BIBLE_TXT = './TEXT/bible.txt'
@@ -24,6 +27,8 @@ MODEL_SENTENCES = 'model.sentences'
 MODEL_CHAPTERS = 'model.chapters'
 MODEL_BOOKS = 'model.books'
 
+import tensorflow.compat.v1 as tf
+tf.disable_eager_execution()
 
 def build_sentence_model(sentence_list):
 
@@ -42,11 +47,12 @@ def build_sentence_model(sentence_list):
     path = MODEL_PATH + MODEL_SENTENCES 
     print(f'Saving sentence model: {path}')
     np.save(path, similarity_matrix)
+    return embeddings
 
 def build_book_model(book_content):
 
     print('computing book embeddings')
-    print(book_content)
+    #print(book_content)
     embed = hub.Module(URL_SENTENCE_ENCODER)
     with tf.compat.v1.Session() as session:
 
@@ -138,7 +144,9 @@ if __name__ == '__main__':
 
     textinput.load_bible()
 
-    build_sentence_model(textinput.AllStoppedSentences)
-    build_book_model(textinput.BookSentencesList)
+    sentence_embeddings = build_sentence_model(textinput.AllStoppedSentences)
+    print(sentence_embeddings[0])
+    print(sentence_embeddings.shape)
+    #build_book_model(textinput.BookSentencesList)
 
     print('done')
